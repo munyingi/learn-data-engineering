@@ -1,0 +1,54 @@
+name: Check submissions
+
+# Runs the learner's answers with read-only permissions. A second workflow
+# (comment-results.yml) posts the result, so code from forks never gets write access.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install duckdb pandas
+
+      - name: List changed files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: git diff --name-only "$BASE_SHA" HEAD > changed.txt && cat changed.txt
+
+      - name: Check answers
+        id: check
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: python scripts/check.py --pr --author "$AUTHOR" --files changed.txt --out result.md
+
+      - name: Save result for the comment
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          OUTCOME: ${{ steps.check.outcome }}
+        run: |
+          mkdir -p out
+          cp result.md out/result.md 2>/dev/null || echo "The check could not run. See the Actions log." > out/result.md
+          echo "$PR_NUMBER" > out/pr.txt
+          echo "$OUTCOME" > out/outcome.txt
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: check-result
+          path: out/

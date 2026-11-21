@@ -1,0 +1,30 @@
+product_id,product_name,category,price
+1,Wireless Earbuds,Electronics,79.9
+2,Classic Keyboard,Electronics,119.0
+3,USB-C Hub,Electronics,39.9
+4,Webcam HD,Electronics,59.0
+5,Laptop Stand,Electronics,45.0
+6,Power Bank,Electronics,29.9
+7,Coffee Grinder,Home,69.0
+8,Linen Towel Set,Home,34.5
+9,Desk Lamp,Home,49.0
+10,Wool Blanket,Home,89.0
+11,Ceramic Mug,Home,14.9
+12,Thermos Bottle,Home,24.9
+13,Smart Foam Roller,Sports,62.4
+14,Yoga Mat,Sports,35.0
+15,Running Socks,Sports,12.9
+16,Badminton Racket,Sports,54.0
+17,Shuttlecocks (12),Sports,18.5
+18,Water Bottle,Sports,16.0
+19,SQL Pocket Guide,Books,29.0
+20,Data Pipelines Handbook,Books,42.0
+21,Python Basics,Books,35.0
+22,Statistics Made Simple,Books,31.0
+23,The Nordic Cookbook,Books,27.5
+24,Rain Jacket,Outdoor,129.0
+25,Hiking Boots,Outdoor,149.0
+26,Headlamp,Outdoor,22.0
+27,Insulated Gloves,Outdoor,32.0
+28,Thermal Base Layer,Outdoor,45.0
+29,Backpack 30L,Outdoor,79.0

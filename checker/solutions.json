@@ -1,0 +1,157 @@
+{
+ "sql1-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price FROM products;",
+  "ordered": false
+ },
+ "sql1-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT DISTINCT country FROM customers;",
+  "ordered": false
+ },
+ "sql1-3": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price, price / 1.255 AS price_ex_vat FROM products;",
+  "ordered": false
+ },
+ "sql2-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price FROM products WHERE category = 'Books' AND price < 35 ORDER BY price;",
+  "ordered": true
+ },
+ "sql2-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT customer_id, first_name, city FROM customers WHERE segment = 'Business' AND city IN ('Helsinki', 'Espoo');",
+  "ordered": false
+ },
+ "sql2-3": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT customer_id, first_name FROM customers WHERE city IS NULL;",
+  "ordered": false
+ },
+ "sql2-4": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price FROM products ORDER BY price DESC LIMIT 5;",
+  "ordered": true
+ },
+ "sql3-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT status, COUNT(*) AS orders FROM orders GROUP BY status;",
+  "ordered": false
+ },
+ "sql3-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT category, COUNT(*) AS products, ROUND(AVG(price), 2) AS avg_price FROM products GROUP BY category;",
+  "ordered": false
+ },
+ "sql3-3": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT city, COUNT(*) AS customers FROM customers WHERE city IS NOT NULL GROUP BY city HAVING COUNT(*) > 20;",
+  "ordered": false
+ },
+ "sql4-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT o.order_id, o.order_date, c.first_name FROM orders AS o JOIN customers AS c ON c.customer_id = o.customer_id;",
+  "ordered": false
+ },
+ "sql4-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT c.customer_id, c.first_name FROM customers AS c LEFT JOIN orders AS o ON o.customer_id = c.customer_id WHERE o.order_id IS NULL;",
+  "ordered": false
+ },
+ "sql4-3": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT p.category, ROUND(SUM(i.quantity * i.unit_price), 2) AS revenue FROM order_items AS i JOIN products AS p ON p.product_id = i.product_id GROUP BY p.category;",
+  "ordered": false
+ },
+ "sql5-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price FROM products WHERE price > (SELECT AVG(price) FROM products);",
+  "ordered": false
+ },
+ "sql5-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "WITH spend AS (SELECT o.customer_id, SUM(i.quantity * i.unit_price) AS total_spend FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered' GROUP BY o.customer_id) SELECT s.customer_id, c.first_name, ROUND(s.total_spend, 2) AS total_spend FROM spend AS s JOIN customers AS c ON c.customer_id = s.customer_id ORDER BY s.total_spend DESC LIMIT 10;",
+  "ordered": true
+ },
+ "sql6-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT category, product_name, price, RANK() OVER (PARTITION BY category ORDER BY price DESC) AS price_rank FROM products;",
+  "ordered": false
+ },
+ "sql6-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "citybikes",
+  "solution": "WITH ranked AS (SELECT year(trip_date) AS year, trip_date, trips, ROW_NUMBER() OVER (PARTITION BY year(trip_date) ORDER BY trips DESC) AS rn FROM daily_trips) SELECT year, trip_date, trips FROM ranked WHERE rn = 1 ORDER BY year;",
+  "ordered": true
+ },
+ "sql7-1": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "SELECT date_trunc('month', o.order_date) AS month, ROUND(SUM(i.quantity * i.unit_price), 2) AS revenue FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered' AND year(o.order_date) = 2026 GROUP BY 1 ORDER BY 1;",
+  "ordered": true
+ },
+ "sql7-2": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "WITH units AS (SELECT p.category, p.product_name, SUM(i.quantity) AS units FROM order_items AS i JOIN orders AS o ON o.order_id = i.order_id JOIN products AS p ON p.product_id = i.product_id WHERE o.status = 'delivered' GROUP BY p.category, p.product_name), ranked AS (SELECT *, RANK() OVER (PARTITION BY category ORDER BY units DESC) AS r FROM units) SELECT category, product_name, units FROM ranked WHERE r = 1;",
+  "ordered": false
+ },
+ "sql7-3": {
+  "kind": "sql",
+  "course": "sql-foundations",
+  "dataset": "shop",
+  "solution": "WITH per_customer AS (SELECT customer_id, COUNT(*) AS orders FROM orders GROUP BY customer_id) SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE orders >= 2) / COUNT(*), 1) AS repeat_share_pct FROM per_customer;",
+  "ordered": false
+ },
+ "py-1": {
+  "kind": "python",
+  "course": "python-challenges",
+  "check": "assert vat_free(125.5) == 100.0, 'vat_free(125.5) should be 100.0'\nassert vat_free(62.75) == 50.0, 'vat_free(62.75) should be 50.0'"
+ },
+ "py-2": {
+  "kind": "python",
+  "course": "python-challenges",
+  "check": "import pandas as pd\n_o = pd.read_csv('data/shop/orders.csv')['status'].value_counts()\nassert int(by_status['delivered']) == int(_o['delivered']), 'Count the rows for each status'\nassert len(by_status) == len(_o), 'There should be one value per status'"
+ },
+ "py-3": {
+  "kind": "python",
+  "course": "python-challenges",
+  "check": "_r = dedupe([{'order_id': 3}, {'order_id': 1}, {'order_id': 3}, {'order_id': 2}])\nassert _r is not None, 'Remember to return the list'\nassert [x['order_id'] for x in _r] == [3, 1, 2], 'Keep the first row of each order_id, in the original order'"
+ }
+}

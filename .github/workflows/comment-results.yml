@@ -1,0 +1,40 @@
+name: Comment results
+
+on:
+  workflow_run:
+    workflows: ["Check submissions"]
+    types: [completed]
+
+permissions:
+  pull-requests: write
+  issues: write
+  actions: read
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: check-result
+          path: out
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment and label
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          PR=$(tr -dc '0-9' < out/pr.txt)
+          [ -n "$PR" ] || exit 0
+          OUTCOME=$(tr -dc 'a-z' < out/outcome.txt)
+          gh label create passed --color 2da44e --description "All exercises passed" -R "$REPO" 2>/dev/null || true
+          gh label create needs-work --color d4a72c --description "Some exercises need another look" -R "$REPO" 2>/dev/null || true
+          gh pr comment "$PR" -R "$REPO" --body-file out/result.md
+          if [ "$OUTCOME" = "success" ]; then
+            gh pr edit "$PR" -R "$REPO" --add-label passed --remove-label needs-work || true
+          else
+            gh pr edit "$PR" -R "$REPO" --add-label needs-work --remove-label passed || true
+          fi

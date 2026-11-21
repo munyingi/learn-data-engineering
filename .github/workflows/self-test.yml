@@ -1,0 +1,23 @@
+name: Self-test
+
+# Makes sure every reference solution still passes when the course changes.
+on:
+  push:
+    branches: [main]
+    paths: ["checker/**", "data/**", "scripts/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install duckdb pandas
+      - run: python scripts/check.py --self-test
+      - run: python scripts/check.py submissions/example

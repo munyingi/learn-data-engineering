@@ -1,0 +1,465 @@
+station_id,station_name,city,capacity
+335,Kurkimäentie,Helsinki,16
+539,"Aalto-yliopisto (M), Tietotie",Espoo,20
+314,Lokitie,Helsinki,18
+95,Munkkiniemen aukio,Helsinki,18
+721,Säterinrinne,Espoo,16
+94,Laajalahden aukio,Helsinki,20
+42,Haapaniemenkatu,Helsinki,18
+596,Toppelundinportti,Espoo,20
+163,Lehtisaarentie,Helsinki,12
+653,Lukutori,Espoo,14
+24,Mannerheimintie,Helsinki,20
+253,Tammisalon aukio,Helsinki,20
+405,Jollas,Helsinki,16
+272,Marjaniementie,Helsinki,16
+507,Golfpolku,Espoo,16
+228,Kustaankartano,Helsinki,20
+84,Paciuksenkatu,Helsinki,14
+625,Suomenlahdentie,Espoo,32
+143,Kuikkarinne,Helsinki,12
+38,Töölöntori,Helsinki,16
+553,Metsänneidonpolku,Espoo,19
+10,Kasarmitori,Helsinki,28
+56,Luoteisväylä,Helsinki,12
+523,Ahertajantie,Espoo,20
+597,Linnakepolku,Espoo,10
+28,Lastenlehto,Helsinki,16
+216,Jännetie,Helsinki,12
+9,Erottajan aukio,Helsinki,44
+589,Haukilahdenranta,Espoo,16
+318,Vuosaaren puistopolku,Helsinki,14
+54,Gyldenintie,Helsinki,36
+263,Herttoniemen kirkko,Helsinki,16
+557,Louhentori,Espoo,16
+595,Westendintie,Espoo,16
+329,Kurkimäki,Helsinki,16
+373,Mikkolantie,Helsinki,16
+4,Viiskulma,Helsinki,14
+265,Siilitie 9,Helsinki,16
+142,Koskelantie,Helsinki,14
+585,Haukilahdenaukio,Espoo,16
+511,Sateentie,Espoo,18
+232,Oulunkylän asema,Helsinki,14
+583,Haukilahdensolmu,Espoo,16
+716,Vermo,Espoo,
+101,Munkkivuoren ostoskeskus,Helsinki,24
+280,Puotilan ostoskeskus,Helsinki,14
+61,Länsisatamankatu,Helsinki,16
+747,Leppävaaran uimahalli,Espoo,18
+577,Olarinluoma,Espoo,18
+70,Sammonpuistikko,Helsinki,14
+221,Thalianaukio,Helsinki,14
+106,Korppaanmäentie,Helsinki,16
+361,Huhtakuja,Helsinki,16
+385,Pajupillintie,Helsinki,16
+269,Peukaloisentie,Helsinki,12
+99,Muusantori,Helsinki,12
+72,Eteläinen Hesperiankatu,Helsinki,18
+242,Von Daehnin katu,Helsinki,14
+275,Itäkeskus (M),Helsinki,28
+141,Intiankatu,Helsinki,16
+709,Yhdyskunnankuja,Espoo,20
+67,Perämiehenkatu,Helsinki,16
+645,Piispankallio,Espoo,16
+6,Hietalahdentori,Helsinki,24
+48,Mastokatu,Helsinki,22
+505,Westendinasema,Espoo,16
+561,Koivu-Mankkaa,Espoo,23
+607,Nuottaniementie,Espoo,15
+370,Rapakiventie,Helsinki,16
+619,Etuniementie,Espoo,10
+33,Kauppakorkeakoulu,Helsinki,16
+360,Malmin asema,Helsinki,24
+336,Kivikonlaita,Helsinki,16
+330,Kontula (M),Helsinki,20
+31,Marian sairaala,Helsinki,16
+391,Tollinpolku,Helsinki,12
+231,Siltavoudintie,Helsinki,16
+271,Prinsessantie,Helsinki,16
+375,Piikintie,Helsinki,12
+710,Kössi Koskisen aukio,Espoo,
+113,Pasilan asema,Helsinki,40
+313,Rastila (M),Helsinki,16
+90,Paciuksenkaari,Helsinki,20
+501,Hanasaari,Espoo,10
+332,Kontulankaari,Helsinki,16
+527,Otsolahti,Espoo,18
+34,Kansallismuseo,Helsinki,16
+729,Leppävaaranaukio,Espoo,30
+83,Meilahden sairaala,Helsinki,28
+204,A.I. Virtasen aukio,Helsinki,24
+69,Kalevankatu,Helsinki,16
+749,Vallikatu,Espoo,24
+518,Tuulimäki,Espoo,18
+277,Marjaniemi,Helsinki,14
+79,Uimastadion,Helsinki,18
+367,Karhusuontie,Helsinki,14
+343,Koetilankuja,Helsinki,12
+108,Radiokatu,Helsinki,12
+353,Helluntairaitti,Helsinki,20
+627,Piispansilta,Espoo,44
+261,Asentajanpuisto,Helsinki,16
+304,Aurinkolahdenaukio,Helsinki,24
+219,Näyttelijäntie,Helsinki,16
+98,Ulvilantie,Helsinki,12
+202,Merihaka,Helsinki,16
+20,Kaisaniemenpuisto,Helsinki,22
+64,Tyynenmerenkatu,Helsinki,20
+145,Pohjolankatu,Helsinki,12
+310,Halkaisijantie,Helsinki,18
+613,Matinkyläntie,Espoo,15
+517,Länsituuli,Espoo,24
+11,Unioninkatu,Helsinki,22
+555,Kalevalantie,Espoo,21
+323,Sallatunturintie,Helsinki,16
+902,Derby Business Park,Espoo,20
+66,Ehrenströmintie,Helsinki,20
+707,Majurinkulma,Espoo,24
+234,Otto Brandtin tie,Helsinki,20
+104,Kriikunakuja,Helsinki,16
+128,Päijänteentie,Helsinki,14
+368,Pukinmäen liikuntapuisto,Helsinki,14
+725,Rummunlyöjänkatu,Espoo,20
+621,Hauenkalliontie,Espoo,12
+213,Huopalahden asema,Helsinki,20
+211,Haagan tori,Helsinki,16
+120,Mäkelänkatu,Helsinki,28
+214,Valimon asema,Helsinki,20
+129,Pernajantie,Helsinki,20
+551,Tietäjä,Espoo,20
+227,Kylävoudintie,Helsinki,14
+525,Mäntyviita,Espoo,10
+376,Torpparinmäentie,Helsinki,14
+200,Länsiterminaali,Helsinki,24
+201,Länsisatamankuja,Helsinki,14
+46,Diakoniapuisto,Helsinki,16
+62,Välimerenkatu,Helsinki,16
+364,Ala-Malmin tori,Helsinki,20
+733,Läkkitori,Espoo,25
+226,Lepolantie,Helsinki,14
+763,Kalkkipellonmäki,Espoo,24
+396,Malminkartanonhuippu,Helsinki,12
+13,Merisotilaantori,Helsinki,24
+541,"Aalto-yliopisto (M), Korkeakouluaukio",Espoo,42
+81,Stenbäckinkatu,Helsinki,18
+382,Hakuninmaa,Helsinki,16
+279,Puotinkylän kartano,Helsinki,16
+80,Jäähalli,Helsinki,22
+565,Mankkaanaukio,Espoo,20
+245,Kulosaari (M),Helsinki,20
+337,Kivikon liikuntapuisto,Helsinki,16
+404,Sompasaari,Helsinki,14
+123,Näkinsilta,Helsinki,24
+236,Hernepellontie,Helsinki,14
+148,Juhana Herttuan tie,Helsinki,16
+207,Vanha Viertotie,Helsinki,16
+225,Maunula,Helsinki,16
+357,Vanha Tapanilantie,Helsinki,16
+258,Abraham Wetterin tie,Helsinki,16
+285,Orpaanporras,Helsinki,14
+39,Ooppera,Helsinki,24
+306,Kauppakeskus Columbus,Helsinki,20
+71,Hietaniemenkatu,Helsinki,24
+515,Oravannahkatori,Espoo,16
+767,Ruutikatu,Espoo,10
+217,Marttila,Helsinki,16
+49,Annankatu,Helsinki,16
+609,Sepetlahdentie,Espoo,10
+264,Eränkävijäntori,Helsinki,16
+36,Apollonkatu,Helsinki,20
+105,Tilkantori,Helsinki,16
+538,Hagalundinpuisto,Espoo,14
+256,Herttoniemenranta,Helsinki,14
+149,Toinen linja,Helsinki,22
+344,Puistolan asema,Helsinki,16
+237,Aulangontie,Helsinki,16
+58,Lauttasaarensilta,Helsinki,20
+351,Kotinummentie,Helsinki,16
+559,Pohjankulma,Espoo,25
+109,Hertanmäenkatu,Helsinki,20
+349,Postiljooninkatu,Helsinki,16
+755,Kutsuntatie,Espoo,16
+727,Ratsutori,Espoo,33
+719,Säteri,Espoo,32
+641,Komeetankatu,Espoo,16
+1,Kaivopuisto,Helsinki,30
+17,Varsapuistikko,Helsinki,28
+262,Siilitie (M),Helsinki,22
+587,Hauenkallio,Espoo,12
+244,Relanderinaukio,Helsinki,16
+251,Laajasalon ostoskeskus,Helsinki,16
+319,Purjetie,Helsinki,18
+603,Matinlahdenranta,Espoo,20
+392,Viljelijäntie,Helsinki,16
+573,Urheilupuisto (M),Espoo,28
+731,Leppävaarankäytävä,Espoo,21
+144,Käpyläntie,Helsinki,14
+132,Urhea-kampus,Helsinki,12
+390,Trumpettikuja,Helsinki,16
+395,Honkasuo,Helsinki,16
+723,Säterinniitty,Espoo,10
+100,Teljäntie,Helsinki,12
+301,Aurinkotuulenkatu,Helsinki,30
+366,Tilketori,Helsinki,20
+997,Workshop Helsinki,Other,
+388,Kaustisentie,Helsinki,16
+533,Tekniikantie,Espoo,18
+303,Leikosaarentie,Helsinki,16
+579,Niittymaa,Espoo,21
+85,Jalavatie,Helsinki,16
+611,Matinkartanontie,Espoo,21
+212,Tunnelitie,Helsinki,14
+110,Maistraatintori,Helsinki,20
+47,Vanha Kauppahalli,Helsinki,22
+769,Lumivaarantie,Espoo,12
+266,Siilitie 13,Helsinki,14
+339,Alppikylä,Helsinki,14
+25,Narinkka,Helsinki,40
+96,Huopalahdentie,Helsinki,20
+135,Velodrominrinne,Helsinki,12
+317,Haapasaarentie,Helsinki,18
+593,Toppelundintie,Espoo,12
+635,Kuunkatu,Espoo,24
+281,Puotila (M),Helsinki,20
+354,Saniaiskuja,Helsinki,16
+999,Relay Box test station,Other,
+133,Paavalinpuisto,Helsinki,22
+22,Rautatientori / länsi,Helsinki,16
+86,Kuusitie,Helsinki,24
+531,Keilaranta,Espoo,24
+93,Torpanranta,Helsinki,16
+59,Salmisaarenranta,Helsinki,28
+711,Kirjurinkuja,Espoo,26
+125,Arielinkatu,Helsinki,16
+63,Jätkäsaarenlaituri,Helsinki,24
+40,Hakaniemi (M),Helsinki,28
+629,Piispanportti,Espoo,16
+341,Heikinlaakso,Helsinki,16
+278,Puotilantie,Helsinki,14
+519,Tapionaukio,Espoo,26
+302,Sumukuja,Helsinki,18
+379,Paloheinän kirjasto,Helsinki,18
+768,Kurkijoentie,Espoo,
+239,Viikin tiedepuisto,Helsinki,28
+257,Margareetankuja,Helsinki,14
+206,Ruskeasuon varikko,Helsinki,14
+637,Ruomelantie,Espoo,12
+715,Komentajankatu,Espoo,12
+754,Lintumetsä,Espoo,
+333,Kivikonkaari,Helsinki,14
+713,Upseerinkatu,Espoo,30
+7,Designmuseo,Helsinki,14
+74,Rajasaarentie,Helsinki,16
+325,Mellunmäki (M),Helsinki,20
+617,Tiistinkallio,Espoo,12
+389,Kannelmäen asema,Helsinki,20
+91,Seurasaari,Helsinki,22
+324,Sinkilätie,Helsinki,16
+139,Muotoilijankatu,Helsinki,16
+399,Vähäntuvantie,Helsinki,14
+118,Fleminginkatu,Helsinki,22
+571,Tapiolan urheilupuisto,Espoo,32
+240,Viikin normaalikoulu,Helsinki,20
+563,Mankkaanlaaksontie,Espoo,26
+27,Eerikinkatu,Helsinki,14
+509,Revontulentie,Espoo,30
+76,Olympiastadion,Helsinki,20
+116,Linnanmäki,Helsinki,32
+358,Syystie,Helsinki,18
+111,Esterinportti,Helsinki,20
+218,Pohjois-Haagan asema,Helsinki,16
+115,Venttiilikuja,Helsinki,16
+761,Mäkkylän asema,Espoo,32
+393,Malminkartanon asema,Helsinki,20
+901,Outotec,Espoo,20
+348,Siltamäki,Helsinki,12
+35,Cygnaeuksenkatu,Helsinki,16
+32,Eläinmuseo,Helsinki,20
+286,Mamsellimyllynkatu,Helsinki,16
+130,Teollisuuskatu,Helsinki,24
+246,Tupasaarentie,Helsinki,12
+703,Elfvik,Espoo,10
+643,Auringonkatu,Espoo,20
+403,Verkkosaari,Helsinki,20
+68,Albertinkatu,Helsinki,20
+737,Muurarinkuja,Espoo,19
+29,Baana,Helsinki,16
+543,Otaranta,Espoo,22
+307,Ulappasilta,Helsinki,18
+127,Teurastamo,Helsinki,30
+371,Savela,Helsinki,14
+60,Kaapelitehdas,Helsinki,26
+89,Tilkanvierto,Helsinki,16
+309,Kaivonkatsojanpuisto,Helsinki,18
+121,Vilhonvuorenkatu,Helsinki,16
+346,Maatullinkuja,Helsinki,18
+75,Korjaamo,Helsinki,20
+53,Heikkiläntie,Helsinki,12
+757,Painiitty,Espoo,12
+383,Kuninkaantammi,Helsinki,20
+250,Reiherintie,Helsinki,12
+282,Karhulantie,Helsinki,12
+521,Kulttuuriaukio,Espoo,30
+575,Tontunmäentie,Espoo,16
+92,Saunalahdentie,Helsinki,8
+119,Gebhardinaukio,Helsinki,20
+5,Sepänkatu,Helsinki,32
+19,Rautatientori / itä,Helsinki,20
+12,Kanavaranta,Helsinki,34
+114,Ratapihantie,Helsinki,20
+203,Opastinsilta,Helsinki,40
+347,Sateenkaarentie,Helsinki,18
+243,Mustikkamaa,Helsinki,20
+745,Leppävaaran urheilupuisto,Espoo,32
+103,Korppaantie,Helsinki,16
+320,Koukkusaarentie,Helsinki,16
+401,Koivusaari (M),Helsinki,16
+615,Tiistiläntie,Espoo,24
+739,Postipuun koulu,Espoo,16
+283,Alakiventie,Helsinki,14
+402,Bermudankuja,Helsinki,16
+3,Kapteeninpuistikko,Helsinki,16
+387,Kauppakeskus Kaari,Helsinki,16
+16,Liisanpuistikko,Helsinki,16
+315,Vuosaaren liikuntapuisto,Helsinki,18
+162,Leppäsuonaukio,Helsinki,28
+26,Kamppi (M),Helsinki,32
+311,Ramsinniementie,Helsinki,18
+112,Rautatieläisenkatu,Helsinki,22
+308,Mosaiikkitori,Helsinki,24
+65,Hernesaarenranta,Helsinki,40
+400,Kuusisaari,Helsinki,16
+359,Malmin sairaala,Helsinki,16
+210,Pajamäki,Helsinki,12
+294,Postipuisto,Helsinki,18
+229,Käskynhaltijantie,Helsinki,18
+14,Senaatintori,Helsinki,22
+334,Varustuksentie,Helsinki,14
+51,Itälahdenkatu,Helsinki,12
+312,Meri-Rastilan tori,Helsinki,16
+397,Hankasuontie,Helsinki,16
+377,Paloheinän maja,Helsinki,20
+328,Lallukankuja,Helsinki,12
+223,Hämeenlinnanväylä,Helsinki,14
+626,Tynnyritie,Espoo,
+87,Kustaankatu,Helsinki,20
+23,Kiasma,Helsinki,30
+131,Elimäenkatu,Helsinki,24
+2,Laivasillankatu,Helsinki,12
+369,Pukinmäen asema,Helsinki,16
+350,Töyrynummi,Helsinki,14
+254,Agnetankuja,Helsinki,16
+601,Nokkala,Espoo,18
+138,Arabiankatu,Helsinki,22
+126,Kalasatama (M),Helsinki,24
+255,Laivalahden puistotie,Helsinki,16
+342,Puistolan VPK,Helsinki,18
+701,Gallen-Kallelan tie,Espoo,10
+741,Gransinmäki,Espoo,20
+220,Ida Aalbergin tie,Helsinki,18
+651,Suurpellonaukio,Espoo,24
+581,Niittykumpu (M),Espoo,35
+735,Mestarinkatu,Espoo,20
+649,Lystimäensilta,Espoo,15
+547,Jämeräntaival,Espoo,30
+362,Teerisuontie,Helsinki,14
+238,Pihlajamäki,Helsinki,16
+549,Maarinranta,Espoo,12
+290,Vallilan varikko,Helsinki,20
+45,Brahen kenttä,Helsinki,20
+363,Väärämäentie,Helsinki,12
+21,Töölönlahdenkatu,Helsinki,44
+107,Tenholantie,Helsinki,18
+900,Orionintie,Espoo,20
+384,Kalannintie,Helsinki,14
+252,Humalniementie,Helsinki,14
+591,Mellstenintie,Espoo,25
+340,Jakomäki,Helsinki,16
+15,Ritarikatu,Helsinki,12
+230,Mäkitorpantie,Helsinki,18
+545,Sähkömies,Espoo,12
+57,Lauttasaaren ostoskeskus,Helsinki,26
+249,Isosaarentie,Helsinki,14
+37,Töölönkatu,Helsinki,18
+305,Kalkkihiekantie,Helsinki,16
+327,Humikkalankuja,Helsinki,16
+537,Innopoli,Espoo,20
+52,Heikkilänaukio,Helsinki,20
+398,Ajomiehentie,Helsinki,20
+224,Vesakkotie,Helsinki,12
+386,Kannelmäen liikuntapuisto,Helsinki,16
+88,Kiskontie,Helsinki,20
+374,Etupellonpuisto,Helsinki,18
+161,Eteläesplanadi,Helsinki,34
+322,Rukatunturintie,Helsinki,14
+623,Nelikkotie,Espoo,16
+326,Tuukkalantie,Helsinki,16
+208,Valimotie,Helsinki,24
+338,Jakomäentie,Helsinki,16
+41,Ympyrätalo,Helsinki,36
+378,Paloheinäntie,Helsinki,16
+215,Pitäjänmäen asema,Helsinki,16
+233,Kirkkoherrantie,Helsinki,10
+355,Halmetie,Helsinki,16
+274,Voikukantie,Helsinki,16
+633,Avaruuskatu,Espoo,16
+124,Isoisänsilta,Helsinki,18
+268,Porolahden koulu,Helsinki,14
+147,Käpylän asema,Helsinki,14
+631,Friisilänaukio,Espoo,12
+751,Vallipolku,Espoo,20
+150,Töölönlahden puisto,Helsinki,24
+146,Pohjolanaukio,Helsinki,16
+381,Maununneva,Helsinki,14
+293,Korkeasaari,Helsinki,16
+55,Puistokaari,Helsinki,16
+331,Lettopolku,Helsinki,16
+73,Kesäkatu,Helsinki,14
+276,Puotinharju,Helsinki,24
+222,Huovitie,Helsinki,12
+44,Sörnäinen (M),Helsinki,22
+639,Itäportti,Espoo,18
+50,Melkonkuja,Helsinki,12
+647,Lystimäki,Espoo,12
+78,Messeniuksenkatu,Helsinki,20
+82,Töölöntulli,Helsinki,16
+321,Vartioharjuntie,Helsinki,14
+140,Verkatehtaanpuisto,Helsinki,14
+284,Myllypuro (M),Helsinki,28
+248,Gunillantie,Helsinki,16
+292,Koskelan varikko,Helsinki,16
+513,Hakalehto,Espoo,24
+705,Laajalahden keskus,Espoo,19
+372,Jokipellontie,Helsinki,16
+365,Karviaistie,Helsinki,16
+259,Petter Wetterin tie,Helsinki,20
+122,Lintulahdenkatu,Helsinki,24
+136,Sofianlehdonkatu,Helsinki,12
+316,Punakiventie,Helsinki,16
+753,Linnuntie,Espoo,24
+352,Tapanilan asema,Helsinki,12
+394,Tuohipolku,Helsinki,12
+43,Karhupuisto,Helsinki,24
+134,Haukilahdenkatu,Helsinki,26
+241,Agronominkatu,Helsinki,24
+137,Arabian kauppakeskus,Helsinki,30
+117,Brahen puistikko,Helsinki,12
+8,Vanha kirkkopuisto,Helsinki,24
+205,Ilmalan asema,Helsinki,16
+30,Itämerentori,Helsinki,40
+270,Tulisuontie,Helsinki,16
+77,Nordenskiöldinaukio,Helsinki,16
+209,Takomotie,Helsinki,14
+235,Katariina Saksilaisen katu,Helsinki,16
+532,Betonimies,Espoo,16
+356,Laulurastaantie,Helsinki,14
+291,Itäkeskus Metrovarikko,Helsinki,16
+345,Kruunuvuorenrannan lautta,Helsinki,16
+247,Haakoninlahdenkatu,Helsinki,16
+18,Porthania,Helsinki,30
+260,Herttoniemi (M),Helsinki,24
+529,Keilaniemi (M),Espoo,40
+503,Keilalahti,Espoo,28
+267,Roihupelto,Helsinki,16
+380,Pirkkolan liikuntapuisto,Helsinki,14
