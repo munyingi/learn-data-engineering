@@ -1,4 +1,4 @@
--- Exercise sql3-3 · Lesson 3: Counting and summarising
+-- Exercise sql3-3 · Lesson 4: Counting and summarising
 -- Dataset: shop
 --
 -- Which cities have more than 20 customers? Show city and the number of customers as

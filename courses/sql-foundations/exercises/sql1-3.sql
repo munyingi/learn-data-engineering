@@ -1,4 +1,4 @@
--- Exercise sql1-3 · Lesson 1: Your first query
+-- Exercise sql1-3 · Lesson 2: Your first query
 -- Dataset: shop
 --
 -- Finnish prices include 25.5% VAT. Show each product_name, its price, and the price

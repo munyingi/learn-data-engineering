@@ -1,4 +1,4 @@
--- Exercise sql7-2 · Lesson 7: Mini project: the monthly report
+-- Exercise sql7-2 · Lesson 8: Mini project: the monthly report
 -- Dataset: shop
 --
 -- Best seller per category. By units sold (sum of quantity) across delivered orders, show

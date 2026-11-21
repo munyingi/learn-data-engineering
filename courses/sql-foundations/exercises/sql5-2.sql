@@ -1,4 +1,4 @@
--- Exercise sql5-2 · Lesson 5: Subqueries and CTEs
+-- Exercise sql5-2 · Lesson 6: Subqueries and CTEs
 -- Dataset: shop
 --
 -- Using a CTE, find the 10 customers who spent the most on delivered orders. Show

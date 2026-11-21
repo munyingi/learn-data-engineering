@@ -1,4 +1,4 @@
--- Exercise sql6-2 · Lesson 6: Window functions
+-- Exercise sql6-2 · Lesson 7: Window functions
 -- Dataset: citybikes
 --
 -- For each year in daily_trips, find the single busiest day. Show year, trip_date and

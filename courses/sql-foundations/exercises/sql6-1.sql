@@ -1,4 +1,4 @@
--- Exercise sql6-1 · Lesson 6: Window functions
+-- Exercise sql6-1 · Lesson 7: Window functions
 -- Dataset: shop
 --
 -- Number the products by price within each category, most expensive first, as price_rank

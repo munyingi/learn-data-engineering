@@ -1,4 +1,4 @@
--- Exercise sql1-1 · Lesson 1: Your first query
+-- Exercise sql1-1 · Lesson 2: Your first query
 -- Dataset: shop
 --
 -- Show the product_name and price of every product.

@@ -1,4 +1,4 @@
--- Exercise sql7-3 · Lesson 7: Mini project: the monthly report
+-- Exercise sql7-3 · Lesson 8: Mini project: the monthly report
 -- Dataset: shop
 --
 -- Repeat customers. Of the customers who have placed at least one order, what share placed

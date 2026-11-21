@@ -1,4 +1,4 @@
--- Exercise sql2-2 · Lesson 2: Filtering and sorting
+-- Exercise sql2-2 · Lesson 3: Filtering and sorting
 -- Dataset: shop
 --
 -- Find Business customers who live in Helsinki or Espoo. Show customer_id, first_name and

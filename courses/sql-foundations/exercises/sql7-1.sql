@@ -1,4 +1,4 @@
--- Exercise sql7-1 · Lesson 7: Mini project: the monthly report
+-- Exercise sql7-1 · Lesson 8: Mini project: the monthly report
 -- Dataset: shop
 --
 -- Revenue by month. For delivered orders in 2026, show month (use date_trunc('month',

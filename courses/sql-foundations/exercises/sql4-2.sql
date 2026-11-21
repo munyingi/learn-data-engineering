@@ -1,4 +1,4 @@
--- Exercise sql4-2 · Lesson 4: Joining tables
+-- Exercise sql4-2 · Lesson 5: Joining tables
 -- Dataset: shop
 --
 -- Which customers have never placed an order? Show their customer_id and first_name.

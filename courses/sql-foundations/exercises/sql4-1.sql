@@ -1,4 +1,4 @@
--- Exercise sql4-1 · Lesson 4: Joining tables
+-- Exercise sql4-1 · Lesson 5: Joining tables
 -- Dataset: shop
 --
 -- For every order, show order_id, order_date and the customer's first_name.

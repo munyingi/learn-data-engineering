@@ -1,4 +1,4 @@
--- Exercise sql2-1 · Lesson 2: Filtering and sorting
+-- Exercise sql2-1 · Lesson 3: Filtering and sorting
 -- Dataset: shop
 --
 -- Show the product_name and price of products in the Books category that cost less than

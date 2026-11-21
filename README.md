@@ -31,6 +31,7 @@ python scripts/check.py submissions/YOUR-GITHUB-USERNAME
 
 ```
 courses/        exercises with the task written at the top of each file
+data/README.md  what every table and column means (read this first)
 data/           the datasets (CSV), the same ones used on the website
 submissions/    learners' answers, one folder per GitHub username
 scripts/        start.py (set up your folder) and check.py (check answers)

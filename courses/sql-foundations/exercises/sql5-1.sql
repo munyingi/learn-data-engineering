@@ -1,4 +1,4 @@
--- Exercise sql5-1 · Lesson 5: Subqueries and CTEs
+-- Exercise sql5-1 · Lesson 6: Subqueries and CTEs
 -- Dataset: shop
 --
 -- Show the product_name and price of products that cost more than the average product

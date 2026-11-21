@@ -1,4 +1,4 @@
--- Exercise sql3-2 · Lesson 3: Counting and summarising
+-- Exercise sql3-2 · Lesson 4: Counting and summarising
 -- Dataset: shop
 --
 -- For each category, show the number of products as products and the average price rounded

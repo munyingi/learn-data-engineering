@@ -1,4 +1,4 @@
--- Exercise sql4-3 · Lesson 4: Joining tables
+-- Exercise sql4-3 · Lesson 5: Joining tables
 -- Dataset: shop
 --
 -- Calculate revenue per product category as revenue: the sum of quantity * unit_price
