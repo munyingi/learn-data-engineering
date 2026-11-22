@@ -1,6 +1,6 @@
 # The datasets
 
-Every exercise uses one of these two datasets. Read this before you start: it explains what one row means and what every column holds.
+Every exercise uses one of these three datasets. Read this before you start: it explains what one row means and what every column holds.
 
 ## Nordic Shop (`data/shop/`)
 
@@ -111,3 +111,60 @@ One row is one day of the bike season. How many trips were made each day, how lo
 **How the tables connect:**
 
 - The two tables are not joined to each other: stations describes places, daily_trips describes days.
+
+## Nordic Shop raw feeds (`data/feeds/`)
+
+The same Nordic Shop, but before anyone cleaned the data. Every night a job loads the day's orders from the shop system, the payment provider sends its own file, and the customer system keeps a log of every change to a customer. Jobs sometimes rerun, run late or fail, so these feeds contain the problems real teams deal with: duplicate rows, late rows, missing days, misspelt values, and orders and payments that do not agree. The clean shop tables (customers, products, orders, order_items) are loaded alongside, so you can compare.
+
+- **Time period:** Orders from 1 January to 15 November 2026; customer changes from January 2024
+- **Source:** Made up for teaching, built from the Nordic Shop orders. Free to use for anything.
+
+### `raw_orders_feed`: 758 rows
+
+One row is one order as it was loaded by the nightly job (an order can appear more than once). Every 2026 order as the load job delivered it. 734 different orders, but some were loaded twice by a rerun, some arrived days late, and nothing at all arrived for a few days in June. Unique key: `none (order_id + loaded_at)`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `order_id` | number | Which order. Matches orders.order_id | `1232` |
+| `customer_id` | number | Who placed it. Empty (NULL) on a few broken rows | `253` |
+| `order_date` | date | The day the order was placed | `2026-01-01` |
+| `status` | text | delivered, shipped, cancelled or returned (plus a few misspelt values) | `delivered` |
+| `amount_eur` | decimal | Order total in euros. Should always be above 0 | `267.90` |
+| `loaded_at` | timestamp | When the nightly job loaded this row | `2026-01-02 02:41` |
+
+- Usually loaded the night after the order. 90 rows arrived 3 or more days late.
+- A reloaded order can have a newer status in its later row, for example shipped and then delivered.
+
+### `payments`: 730 rows
+
+One row is one payment or refund from the payment provider. Money received for orders. Refunds for returned orders appear as negative amounts with method refund. Unique key: `payment_id`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `payment_id` | number | Unique id from the payment provider | `50000` |
+| `order_id` | number | Which order was paid. Matches raw_orders_feed.order_id | `1232` |
+| `paid_at` | timestamp | When the money moved | `2026-01-01 11:41` |
+| `amount_eur` | decimal | Amount in euros. Negative for refunds | `267.90` |
+| `method` | text | card, mobilepay, paypal or refund | `card` |
+
+- Cancelled orders are never paid. A few delivered orders are missing a payment, and a few customers were charged twice.
+
+### `customer_history`: 108 rows
+
+One row is one version of a customer, valid from a date until the next version starts. The change log for the 45 customers who moved city or changed segment. The customers table only shows where they are today; this table shows where they were before. Unique key: `customer_id + valid_from`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `customer_id` | number | Which customer. Matches customers.customer_id | `15` |
+| `valid_from` | date | First day this version was true | `2026-03-23` |
+| `city` | text | Where the customer lived from that day | `Jyväskylä` |
+| `segment` | text | Consumer or Business from that day | `Consumer` |
+
+- 34 of the 45 customers have lived in more than one city. The newest version of each customer matches the customers table.
+
+**How the tables connect:**
+
+- raw_orders_feed.order_id → payments.order_id (orders and their payments)
+- raw_orders_feed.customer_id → customers.customer_id
+- customer_history.customer_id → customers.customer_id (old versions of a customer)
+- orders.order_date between a version's dates → the city the customer lived in at the time

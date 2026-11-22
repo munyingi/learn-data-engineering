@@ -33,6 +33,9 @@ TABLES = {
     "order_items": "data/shop/order_items.csv",
     "stations": "data/citybikes/stations.csv",
     "daily_trips": "data/citybikes/daily_trips.csv",
+    "raw_orders_feed": "data/feeds/raw_orders_feed.csv",
+    "payments": "data/feeds/payments.csv",
+    "customer_history": "data/feeds/customer_history.csv",
 }
 USERNAME = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 
@@ -143,7 +146,10 @@ def main() -> int:
     if args.self_test:
         bad = []
         for ex_id, spec in SOLUTIONS.items():
-            ok = check_sql(con, ex_id, spec["solution"])[0] if spec["kind"] == "sql" else True
+            if spec["kind"] == "sql":
+                ok = check_sql(con, ex_id, spec["solution"])[0]
+            else:
+                ok = check_python(ex_id, spec["solution"])[0] if "solution" in spec else True
             if not ok:
                 bad.append(ex_id)
         print("all solutions pass" if not bad else f"failing: {bad}")

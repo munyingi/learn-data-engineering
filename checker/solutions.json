@@ -139,19 +139,287 @@
   "solution": "WITH per_customer AS (SELECT customer_id, COUNT(*) AS orders FROM orders GROUP BY customer_id) SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE orders >= 2) / COUNT(*), 1) AS repeat_share_pct FROM per_customer;",
   "ordered": false
  },
+ "py2-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "net = 80.0\ntotal_with_vat = round(net * 1.255, 2)\nprint(total_with_vat)",
+  "check": "assert total_with_vat == 100.4, 'total_with_vat should be 100.4'"
+ },
+ "py2-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "values = [49.0, 120.5, 18.0, 260.0, 74.9]\naverage = round(sum(values) / len(values), 2)\nbiggest = max(values)\nprint(average, biggest)",
+  "check": "assert average == 104.48, 'average should be 104.48 (sum divided by count, rounded)'\nassert biggest == 260.0, 'biggest should be 260.0'"
+ },
+ "py2-3": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "order_id = 1042\nvalue = 49\nmessage = f\"Order {order_id} is worth €{value:.2f}\"\nprint(message)",
+  "check": "assert message == 'Order 1042 is worth €49.00', 'message should be exactly: Order 1042 is worth €49.00'"
+ },
+ "py3-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "orders = [\n    {\"order_id\": 1, \"status\": \"delivered\", \"amount\": 49.0},\n    {\"order_id\": 2, \"status\": \"cancelled\", \"amount\": 120.0},\n    {\"order_id\": 3, \"status\": \"delivered\", \"amount\": 18.5},\n    {\"order_id\": 4, \"status\": \"returned\", \"amount\": 75.0},\n    {\"order_id\": 5, \"status\": \"delivered\", \"amount\": 260.0},\n]\ndelivered_total = 0\nfor o in orders:\n    if o[\"status\"] == \"delivered\":\n        delivered_total += o[\"amount\"]\n\nprint(delivered_total)",
+  "check": "assert delivered_total == 327.5, 'delivered_total should be 327.5 (49.0 + 18.5 + 260.0)'"
+ },
+ "py3-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "def count_by(rows, key):\n    counts = {}\n    for r in rows:\n        counts[r[key]] = counts.get(r[key], 0) + 1\n    return counts\n\norders = [\n    {\"status\": \"delivered\"}, {\"status\": \"cancelled\"}, {\"status\": \"delivered\"},\n    {\"status\": \"returned\"}, {\"status\": \"delivered\"},\n]\nprint(count_by(orders, \"status\"))",
+  "check": "assert count_by([{'s': 'a'}, {'s': 'b'}, {'s': 'a'}], 's') == {'a': 2, 'b': 1}, 'count_by should count each value of the key'\nassert count_by([], 's') == {}, 'an empty list should give an empty dictionary'"
+ },
+ "py3-3": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "orders = [\n    {\"order_id\": 1, \"amount\": 49.0},\n    {\"order_id\": 2, \"amount\": 120.0},\n    {\"order_id\": 3, \"amount\": 100.0},\n    {\"order_id\": 4, \"amount\": 18.5},\n]\nbig_orders = [o[\"order_id\"] for o in orders if o[\"amount\"] >= 100]\nprint(big_orders)",
+  "check": "assert big_orders == [2, 3], 'big_orders should be [2, 3]'"
+ },
+ "py4-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\norders = pd.read_csv(\"data/shop/orders.csv\", parse_dates=[\"order_date\"])\norders_2025 = int((orders[\"order_date\"].dt.year == 2025).sum())\nprint(orders_2025)",
+  "check": "import pandas as pd\n_o = pd.read_csv('data/shop/orders.csv', parse_dates=['order_date'])\nassert int(orders_2025) == int((_o['order_date'].dt.year == 2025).sum()), 'count the rows where the year of order_date is 2025'"
+ },
+ "py4-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\nproducts = pd.read_csv(\"data/shop/products.csv\")\navg_price = products.groupby(\"category\")[\"price\"].mean().round(2)\nprint(avg_price)",
+  "check": "import pandas as pd\n_p = pd.read_csv('data/shop/products.csv').groupby('category')['price'].mean().round(2)\nassert len(avg_price) == len(_p), 'there should be one value per category'\nassert abs(float(avg_price['Books']) - float(_p['Books'])) < 0.01, 'check the Books average'"
+ },
+ "py4-3": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\norders = pd.read_csv(\"data/shop/orders.csv\")\ntop_customer = int(orders[\"customer_id\"].value_counts().idxmax())\nprint(top_customer)",
+  "check": "import pandas as pd\n_c = pd.read_csv('data/shop/orders.csv')['customer_id'].value_counts()\nassert int(_c[int(top_customer)]) == int(_c.max()), 'top_customer should be the customer with the most orders'"
+ },
+ "py5-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\nitems = pd.read_csv(\"data/shop/order_items.csv\")\nproducts = pd.read_csv(\"data/shop/products.csv\")\n\nlines = items.merge(products, on=\"product_id\")\nlines[\"line_value\"] = lines[\"quantity\"] * lines[\"unit_price\"]\nrevenue_by_category = lines.groupby(\"category\")[\"line_value\"].sum().round(2)\nprint(revenue_by_category)",
+  "check": "import pandas as pd\n_l = pd.read_csv('data/shop/order_items.csv').merge(pd.read_csv('data/shop/products.csv'), on='product_id')\n_r = (_l['quantity'] * _l['unit_price']).groupby(_l['category']).sum().round(2)\nassert len(revenue_by_category) == 5, 'there should be 5 categories'\nassert abs(float(revenue_by_category['Electronics']) - float(_r['Electronics'])) < 0.01, 'check the Electronics total: quantity * unit_price, summed'"
+ },
+ "py5-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\norders = pd.read_csv(\"data/shop/orders.csv\")\nitems = pd.read_csv(\"data/shop/order_items.csv\")\ncustomers = pd.read_csv(\"data/shop/customers.csv\")\n\ndelivered = orders[orders[\"status\"] == \"delivered\"].merge(items, on=\"order_id\")\ndelivered[\"value\"] = delivered[\"quantity\"] * delivered[\"unit_price\"]\nper_customer = delivered.groupby(\"customer_id\", as_index=False)[\"value\"].sum()\nspend = per_customer.merge(customers[[\"customer_id\", \"first_name\"]], on=\"customer_id\")\nspend[\"total\"] = spend[\"value\"].round(2)\nspend = spend[[\"customer_id\", \"first_name\", \"total\"]]\nprint(spend.sort_values(\"total\", ascending=False).head())",
+  "check": "import pandas as pd\n_o = pd.read_csv('data/shop/orders.csv'); _i = pd.read_csv('data/shop/order_items.csv')\n_d = _o[_o['status'] == 'delivered'].merge(_i, on='order_id')\n_t = (_d['quantity'] * _d['unit_price']).groupby(_d['customer_id']).sum()\nassert list(spend.columns) == ['customer_id', 'first_name', 'total'], 'columns should be customer_id, first_name, total'\nassert len(spend) == len(_t), 'one row per customer with a delivered order'\n_top = int(_t.idxmax())\nassert abs(float(spend.set_index('customer_id').loc[_top, 'total']) - round(float(_t.max()), 2)) < 0.01, 'check the totals: delivered orders only, quantity * unit_price'"
+ },
+ "py6-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "def fetch_with_retry(call, attempts):\n    for attempt in range(attempts):\n        try:\n            return call()\n        except ConnectionError:\n            if attempt == attempts - 1:\n                raise\n\n\ndef flaky():\n    flaky.n += 1\n    if flaky.n < 3:\n        raise ConnectionError(\"timeout\")\n    return \"data\"\nflaky.n = 0\n\nprint(fetch_with_retry(flaky, 5))",
+  "check": "def _make(fail_times):\n    s = {'n': 0}\n    def f():\n        s['n'] += 1\n        if s['n'] <= fail_times:\n            raise ConnectionError('x')\n        return 'ok'\n    return f, s\n_f, _s = _make(2)\nassert fetch_with_retry(_f, 5) == 'ok', 'should return the result once a call succeeds'\nassert _s['n'] == 3, 'should stop calling after the first success'\n_f, _s = _make(10)\ntry:\n    fetch_with_retry(_f, 3)\n    raise AssertionError('should raise ConnectionError when every attempt fails')\nexcept ConnectionError:\n    pass\nassert _s['n'] == 3, 'should try exactly attempts times'"
+ },
+ "py6-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "def backoff_waits(attempts, first=1):\n    return [first * 2 ** i for i in range(attempts - 1)]\n\nprint(backoff_waits(4))",
+  "check": "assert backoff_waits(4) == [1, 2, 4], 'backoff_waits(4) should be [1, 2, 4]'\nassert backoff_waits(1) == [], 'one attempt means no waits'\nassert backoff_waits(3, first=5) == [5, 10], 'backoff_waits(3, first=5) should be [5, 10]'"
+ },
+ "py7-1": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\ndef load(existing, batch):\n    combined = pd.concat([existing, batch], ignore_index=True)\n    latest = combined.sort_values(\"loaded_at\").drop_duplicates(\"order_id\", keep=\"last\")\n    return latest.sort_values(\"order_id\").reset_index(drop=True)\n\n\nexisting = pd.DataFrame({\"order_id\": [1, 2], \"status\": [\"shipped\", \"delivered\"], \"loaded_at\": [\"2026-11-01\", \"2026-11-01\"]})\nbatch = pd.DataFrame({\"order_id\": [1, 3], \"status\": [\"delivered\", \"delivered\"], \"loaded_at\": [\"2026-11-02\", \"2026-11-02\"]})\nonce = load(existing, batch)\ntwice = load(once, batch)\nprint(once)\nprint(once.equals(twice))",
+  "check": "import pandas as pd\n_e = pd.DataFrame({'order_id': [1, 2], 'status': ['shipped', 'delivered'], 'loaded_at': ['2026-11-01', '2026-11-01']})\n_b = pd.DataFrame({'order_id': [1, 3], 'status': ['delivered', 'delivered'], 'loaded_at': ['2026-11-02', '2026-11-02']})\n_once = load(_e, _b)\nassert _once is not None, 'remember to return the DataFrame'\nassert list(_once['order_id']) == [1, 2, 3], 'one row per order_id, sorted by order_id'\nassert _once.loc[_once['order_id'] == 1, 'status'].iloc[0] == 'delivered', 'keep the newest version of order 1'\nassert _once.equals(load(_once, _b)), 'loading the same batch twice must not change the result'"
+ },
+ "py7-2": {
+  "kind": "python",
+  "course": "python-for-data",
+  "solution": "import pandas as pd\n\nfeed = pd.read_csv(\"data/feeds/raw_orders_feed.csv\")\nclean = feed.sort_values(\"loaded_at\").drop_duplicates(\"order_id\", keep=\"last\")\nduplicates_removed = len(feed) - len(clean)\nprint(len(feed), len(clean), duplicates_removed)",
+  "check": "import pandas as pd\n_f = pd.read_csv('data/feeds/raw_orders_feed.csv')\nassert clean['order_id'].is_unique, 'clean should have one row per order_id'\nassert len(clean) == _f['order_id'].nunique(), 'keep every order once'\nassert int(duplicates_removed) == len(_f) - _f['order_id'].nunique(), 'duplicates_removed = rows before minus rows after'"
+ },
+ "dm1-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "SELECT COUNT(*) AS orders FROM (SELECT order_id FROM order_items GROUP BY order_id HAVING COUNT(*) > 1) AS t;",
+  "ordered": false
+ },
+ "dm1-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "SELECT COUNT(*) AS duplicate_pairs FROM (SELECT order_id, product_id FROM order_items GROUP BY order_id, product_id HAVING COUNT(*) > 1) AS t;",
+  "ordered": false
+ },
+ "dm2-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "SELECT o.order_id, o.order_date, o.customer_id, i.product_id, i.quantity, i.quantity * i.unit_price AS line_value FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered';",
+  "ordered": false
+ },
+ "dm2-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "WITH fct AS (SELECT o.order_id, o.channel, i.quantity * i.unit_price AS line_value FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered') SELECT channel, ROUND(SUM(line_value), 2) AS revenue FROM fct GROUP BY channel;",
+  "ordered": false
+ },
+ "dm3-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "SELECT product_id, product_name, category, CASE WHEN price < 30 THEN 'budget' WHEN price <= 80 THEN 'mid' ELSE 'premium' END AS price_band FROM products;",
+  "ordered": false
+ },
+ "dm3-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "SELECT d::DATE AS date_day, year(d) AS year, month(d) AS month, isodow(d) >= 6 AS is_weekend FROM generate_series(DATE '2026-01-01', DATE '2026-12-31', INTERVAL 1 DAY) AS t(d);",
+  "ordered": false
+ },
+ "dm4-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "WITH fct AS (SELECT o.customer_id, i.product_id, i.quantity * i.unit_price AS line_value FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered') SELECT c.country, p.category, ROUND(SUM(f.line_value), 2) AS revenue FROM fct AS f JOIN customers AS c ON c.customer_id = f.customer_id JOIN products AS p ON p.product_id = f.product_id GROUP BY c.country, p.category;",
+  "ordered": false
+ },
+ "dm4-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "shop",
+  "solution": "WITH dim_date AS (SELECT d::DATE AS date_day, isodow(d) >= 6 AS is_weekend FROM generate_series(DATE '2026-01-01', DATE '2026-12-31', INTERVAL 1 DAY) AS t(d)), fct AS (SELECT o.order_date, i.quantity * i.unit_price AS line_value FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered') SELECT d.is_weekend, ROUND(SUM(f.line_value), 2) AS revenue FROM fct AS f JOIN dim_date AS d ON d.date_day = f.order_date GROUP BY d.is_weekend;",
+  "ordered": false
+ },
+ "dm5-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "feeds",
+  "solution": "SELECT customer_id, city, segment, valid_from, LEAD(valid_from) OVER (PARTITION BY customer_id ORDER BY valid_from) - 1 AS valid_to FROM customer_history;",
+  "ordered": false
+ },
+ "dm5-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "feeds",
+  "solution": "WITH scd AS (SELECT customer_id, city, valid_from, LEAD(valid_from) OVER (PARTITION BY customer_id ORDER BY valid_from) - 1 AS valid_to FROM customer_history) SELECT city FROM scd WHERE customer_id = 15 AND DATE '2026-06-01' >= valid_from AND (valid_to IS NULL OR DATE '2026-06-01' <= valid_to);",
+  "ordered": false
+ },
+ "dm5-3": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "feeds",
+  "solution": "SELECT customer_id, COUNT(DISTINCT city) AS cities FROM customer_history GROUP BY customer_id HAVING COUNT(DISTINCT city) > 1;",
+  "ordered": false
+ },
+ "dm6-1": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "feeds",
+  "solution": "WITH scd AS (SELECT customer_id, city, valid_from, LEAD(valid_from) OVER (PARTITION BY customer_id ORDER BY valid_from) - 1 AS valid_to FROM customer_history), fct AS (SELECT o.order_date, o.customer_id, i.quantity * i.unit_price AS line_value FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered' AND year(o.order_date) = 2026) SELECT s.city AS city_at_order, ROUND(SUM(f.line_value), 2) AS revenue FROM fct AS f JOIN scd AS s ON s.customer_id = f.customer_id AND f.order_date >= s.valid_from AND (s.valid_to IS NULL OR f.order_date <= s.valid_to) GROUP BY s.city;",
+  "ordered": false
+ },
+ "dm6-2": {
+  "kind": "sql",
+  "course": "data-modelling",
+  "dataset": "feeds",
+  "solution": "WITH scd AS (SELECT customer_id, city, valid_from, LEAD(valid_from) OVER (PARTITION BY customer_id ORDER BY valid_from) - 1 AS valid_to FROM customer_history) SELECT COUNT(*) AS orders_moved FROM orders AS o JOIN scd AS s ON s.customer_id = o.customer_id AND o.order_date >= s.valid_from AND (s.valid_to IS NULL OR o.order_date <= s.valid_to) JOIN customers AS c ON c.customer_id = o.customer_id WHERE s.city <> c.city;",
+  "ordered": false
+ },
+ "dq1-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT COUNT(*) AS rows, COUNT(DISTINCT order_id) AS orders FROM raw_orders_feed;",
+  "ordered": false
+ },
+ "dq2-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, COUNT(*) AS times_loaded FROM raw_orders_feed GROUP BY order_id HAVING COUNT(*) > 1;",
+  "ordered": false
+ },
+ "dq2-2": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, arg_min(status, loaded_at) AS first_status, arg_max(status, loaded_at) AS last_status FROM raw_orders_feed GROUP BY order_id HAVING arg_min(status, loaded_at) <> arg_max(status, loaded_at);",
+  "ordered": false
+ },
+ "dq2-3": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, customer_id, order_date, status, amount_eur FROM raw_orders_feed QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY loaded_at DESC) = 1;",
+  "ordered": false
+ },
+ "dq3-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT COUNT(*) AS late_rows FROM raw_orders_feed WHERE date_diff('day', order_date, loaded_at::DATE) >= 3;",
+  "ordered": false
+ },
+ "dq3-2": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "WITH expected AS (SELECT d::DATE AS day_date FROM generate_series(DATE '2026-06-01', DATE '2026-06-30', INTERVAL 1 DAY) AS t(d)) SELECT day_date AS missing_day FROM expected WHERE day_date NOT IN (SELECT order_date FROM raw_orders_feed);",
+  "ordered": false
+ },
+ "dq3-3": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "WITH expected AS (SELECT d::DATE AS day_date FROM generate_series(DATE '2026-01-01', DATE '2026-11-15', INTERVAL 1 DAY) AS t(d)), missing AS (SELECT day_date FROM expected WHERE day_date NOT IN (SELECT order_date FROM raw_orders_feed)), runs AS (SELECT day_date, day_date - CAST(ROW_NUMBER() OVER (ORDER BY day_date) AS INTEGER) AS run_id FROM missing) SELECT MIN(day_date) AS first_day, MAX(day_date) AS last_day, COUNT(*) AS days FROM runs GROUP BY run_id ORDER BY days DESC LIMIT 1;",
+  "ordered": true
+ },
+ "dq4-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, status FROM raw_orders_feed WHERE status NOT IN ('delivered', 'shipped', 'cancelled', 'returned');",
+  "ordered": false
+ },
+ "dq4-2": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, 'missing customer' AS problem FROM raw_orders_feed WHERE customer_id IS NULL UNION ALL SELECT order_id, 'invalid status' AS problem FROM raw_orders_feed WHERE status NOT IN ('delivered', 'shipped', 'cancelled', 'returned') UNION ALL SELECT order_id, 'non-positive amount' AS problem FROM raw_orders_feed WHERE amount_eur <= 0;",
+  "ordered": false
+ },
+ "dq5-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "WITH orders AS (SELECT order_id, status, amount_eur FROM raw_orders_feed QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY loaded_at DESC) = 1) SELECT o.order_id, o.amount_eur FROM orders AS o LEFT JOIN payments AS p ON p.order_id = o.order_id WHERE o.status = 'delivered' AND p.payment_id IS NULL;",
+  "ordered": false
+ },
+ "dq5-2": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, COUNT(*) AS payments, SUM(amount_eur) AS charged_eur FROM payments WHERE method <> 'refund' GROUP BY order_id HAVING COUNT(*) > 1;",
+  "ordered": false
+ },
+ "dq6-1": {
+  "kind": "sql",
+  "course": "data-quality",
+  "dataset": "feeds",
+  "solution": "SELECT 'duplicate_orders' AS check_name, COUNT(*) AS failed_rows FROM (SELECT order_id FROM raw_orders_feed GROUP BY order_id HAVING COUNT(*) > 1) AS t UNION ALL SELECT 'missing_customer', COUNT(*) FROM raw_orders_feed WHERE customer_id IS NULL UNION ALL SELECT 'invalid_status', COUNT(*) FROM raw_orders_feed WHERE status NOT IN ('delivered', 'shipped', 'cancelled', 'returned') UNION ALL SELECT 'non_positive_amount', COUNT(*) FROM raw_orders_feed WHERE amount_eur <= 0 UNION ALL SELECT 'double_payments', COUNT(*) FROM (SELECT order_id FROM payments WHERE method <> 'refund' GROUP BY order_id HAVING COUNT(*) > 1) AS p;",
+  "ordered": false
+ },
  "py-1": {
   "kind": "python",
   "course": "python-challenges",
+  "solution": "def vat_free(price):\n    return round(price / 1.255, 2)\n\nprint(vat_free(125.5))",
   "check": "assert vat_free(125.5) == 100.0, 'vat_free(125.5) should be 100.0'\nassert vat_free(62.75) == 50.0, 'vat_free(62.75) should be 50.0'"
  },
  "py-2": {
   "kind": "python",
   "course": "python-challenges",
+  "solution": "import pandas as pd\n\norders = pd.read_csv('data/shop/orders.csv')\nby_status = orders['status'].value_counts()\nprint(by_status)",
   "check": "import pandas as pd\n_o = pd.read_csv('data/shop/orders.csv')['status'].value_counts()\nassert int(by_status['delivered']) == int(_o['delivered']), 'Count the rows for each status'\nassert len(by_status) == len(_o), 'There should be one value per status'"
  },
  "py-3": {
   "kind": "python",
   "course": "python-challenges",
+  "solution": "def dedupe(rows):\n    seen = set()\n    out = []\n    for r in rows:\n        if r['order_id'] not in seen:\n            seen.add(r['order_id'])\n            out.append(r)\n    return out\n\nrows = [\n    {'order_id': 1, 'total': 10},\n    {'order_id': 2, 'total': 20},\n    {'order_id': 1, 'total': 10},\n]\nprint(dedupe(rows))",
   "check": "_r = dedupe([{'order_id': 3}, {'order_id': 1}, {'order_id': 3}, {'order_id': 2}])\nassert _r is not None, 'Remember to return the list'\nassert [x['order_id'] for x in _r] == [3, 1, 2], 'Keep the first row of each order_id, in the original order'"
  }
 }

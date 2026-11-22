@@ -9,9 +9,12 @@ Free, hands-on data engineering exercises by [Samwel Munyingi](https://samwelmun
 | Course | Level | Exercises |
 |---|---|---|
 | [SQL Foundations](courses/sql-foundations/) | Beginner | 20 SQL exercises on a shop and on Helsinki city bikes |
+| [Python for Data](courses/python-for-data/) | Beginner | 15 Python and pandas exercises, ending with a loader for a messy feed |
+| [Data Modelling](courses/data-modelling/) | Intermediate | 13 SQL exercises: grain, facts, dimensions, SCD Type 2 |
+| [Data Quality and Reconciliation](courses/data-quality/) | Intermediate | 12 SQL exercises on raw feeds with duplicates, gaps and bad values |
 | [Python challenges](courses/python-challenges/) | Beginner | 3 small pipeline tasks |
 
-More courses are on the way: Python for Data, Data Modelling, dbt in Practice, Data Quality, Orchestration, Cloud Warehouses, Streaming and CDC, and Privacy by Design.
+More courses are on the way: dbt in Practice, Orchestration and Backfills, Cloud Warehouses, Streaming and CDC, Privacy by Design, and Portfolio and Job Search.
 
 ## Three ways to use this repo
 

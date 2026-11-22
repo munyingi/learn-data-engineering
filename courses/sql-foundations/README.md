@@ -1,6 +1,6 @@
 # SQL Foundations
 
-Seven short lessons, from your first query to window functions. Read each lesson on the website, then solve the exercises here.
+Eight short lessons, from your first query to window functions. Read each lesson on the website, then solve the exercises here.
 
 Course page: https://community.samwelmunyingi.org/courses/sql-foundations/
 
@@ -27,4 +27,4 @@ Course page: https://community.samwelmunyingi.org/courses/sql-foundations/
 | 8 | [Mini project: the monthly report](https://community.samwelmunyingi.org/courses/sql-foundations/mini-project-monthly-report/) | `sql7-2` | Best seller per category |
 | 8 | [Mini project: the monthly report](https://community.samwelmunyingi.org/courses/sql-foundations/mini-project-monthly-report/) | `sql7-3` | Repeat customers |
 
-Each file in `exercises/` has the task as a comment and a starter query. Copy them to your own folder with `python scripts/start.py YOUR-GITHUB-USERNAME`, solve them, and check them with `python scripts/check.py`.
+Each file in `exercises/` has the task as a comment and a starter. Copy them to your own folder with `python scripts/start.py YOUR-GITHUB-USERNAME`, solve them, and check them with `python scripts/check.py`.
