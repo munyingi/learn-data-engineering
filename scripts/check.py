@@ -36,6 +36,11 @@ TABLES = {
     "raw_orders_feed": "data/feeds/raw_orders_feed.csv",
     "payments": "data/feeds/payments.csv",
     "customer_history": "data/feeds/customer_history.csv",
+    "order_events": "data/feeds/order_events.csv",
+    "customer_contacts": "data/feeds/customer_contacts.csv",
+    "deletion_requests": "data/feeds/deletion_requests.csv",
+    "pipeline_runs": "data/ops/pipeline_runs.csv",
+    "query_log": "data/ops/query_log.csv",
 }
 USERNAME = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 

@@ -12,9 +12,15 @@ Free, hands-on data engineering exercises by [Samwel Munyingi](https://samwelmun
 | [Python for Data](courses/python-for-data/) | Beginner | 15 Python and pandas exercises, ending with a loader for a messy feed |
 | [Data Modelling](courses/data-modelling/) | Intermediate | 13 SQL exercises: grain, facts, dimensions, SCD Type 2 |
 | [Data Quality and Reconciliation](courses/data-quality/) | Intermediate | 12 SQL exercises on raw feeds with duplicates, gaps and bad values |
+| [dbt in Practice](courses/dbt-in-practice/) | Intermediate | 10 SQL exercises: staging, tests, macros, incremental models |
+| [Orchestration, CI and Backfills](courses/orchestration-and-backfills/) | Intermediate | 8 Python and SQL exercises on DAGs, retries, SLAs and backfills |
+| [Cloud Warehouses](courses/cloud-warehouses/) | Intermediate | 7 SQL exercises on a month of warehouse query history |
+| [Streaming and Change Data Capture](courses/streaming-and-cdc/) | Advanced | 9 SQL exercises on a stream of order changes |
+| [Privacy by Design](courses/privacy-by-design/) | Advanced | 7 SQL exercises on personal data and deletion requests |
+| [Your Portfolio and the Job Search](courses/portfolio-and-job-search/) | Intermediate | 6 SQL and Python interview questions |
 | [Python challenges](courses/python-challenges/) | Beginner | 3 small pipeline tasks |
 
-More courses are on the way: dbt in Practice, Orchestration and Backfills, Cloud Warehouses, Streaming and CDC, Privacy by Design, and Portfolio and Job Search.
+All ten courses are open.
 
 ## Three ways to use this repo
 

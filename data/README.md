@@ -1,6 +1,6 @@
 # The datasets
 
-Every exercise uses one of these three datasets. Read this before you start: it explains what one row means and what every column holds.
+Every exercise uses one of these four datasets. Read this before you start: it explains what one row means and what every column holds.
 
 ## Nordic Shop (`data/shop/`)
 
@@ -114,9 +114,9 @@ One row is one day of the bike season. How many trips were made each day, how lo
 
 ## Nordic Shop raw feeds (`data/feeds/`)
 
-The same Nordic Shop, but before anyone cleaned the data. Every night a job loads the day's orders from the shop system, the payment provider sends its own file, and the customer system keeps a log of every change to a customer. Jobs sometimes rerun, run late or fail, so these feeds contain the problems real teams deal with: duplicate rows, late rows, missing days, misspelt values, and orders and payments that do not agree. The clean shop tables (customers, products, orders, order_items) are loaded alongside, so you can compare.
+The same Nordic Shop, but before anyone cleaned the data. Every night a job loads the day's orders from the shop system, the payment provider sends its own file, and the customer system keeps a log of every change to a customer. Since September a change stream also sends every change to an order as an event, and the shop keeps contact details and privacy requests in their own tables. Jobs sometimes rerun, run late or fail, so these feeds contain the problems real teams deal with: duplicate rows, late rows, missing days, misspelt values, and orders and payments that do not agree. The clean shop tables (customers, products, orders, order_items) are loaded alongside, so you can compare.
 
-- **Time period:** Orders from 1 January to 15 November 2026; customer changes from January 2024
+- **Time period:** Orders from 1 January to 15 November 2026; order events from September 2026; customer changes from January 2024
 - **Source:** Made up for teaching, built from the Nordic Shop orders. Free to use for anything.
 
 ### `raw_orders_feed`: 758 rows
@@ -162,9 +162,100 @@ One row is one version of a customer, valid from a date until the next version s
 
 - 34 of the 45 customers have lived in more than one city. The newest version of each customer matches the customers table.
 
+### `order_events`: 737 rows
+
+One row is one change to one order, captured from the shop database (change data capture). Every insert, update and delete on orders since 1 September 2026, in the order the database made them. Unique key: `lsn`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `lsn` | number | Position in the database's change log. Always increasing: the true order of changes | `100007` |
+| `op` | text | c = order created, u = updated, d = deleted | `u` |
+| `order_id` | number | Which order changed | `1946` |
+| `customer_id` | number | Who placed it. Empty on delete events | `162` |
+| `status` | text | Status after the change: placed, shipped, delivered, cancelled or returned. Empty on deletes | `shipped` |
+| `amount_eur` | decimal | Order total after the change. Empty on deletes | `356.70` |
+| `changed_at` | timestamp | When the change happened in the shop | `2026-09-01 07:39:05` |
+| `received_at` | timestamp | When the event reached the data platform | `2026-09-01 07:39:38` |
+
+- Most events arrive within seconds, but a few arrive minutes, hours or even days late, after newer events for the same order.
+- Four cancelled test orders were deleted.
+
+### `customer_contacts`: 300 rows
+
+One row is one customer's contact details. Personal data kept apart from the rest of the shop data. Emails use example.com and phone numbers are not real. Unique key: `customer_id`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `customer_id` | number | Matches customers.customer_id | `1` |
+| `email` | text | Email address | `ella.1@example.com` |
+| `phone` | text | Phone number | `+358 40 555 0001` |
+| `birth_year` | number | Year of birth | `1985` |
+| `marketing_consent` | true/false | true if the customer agreed to marketing email | `false` |
+| `consent_updated_at` | date | When the consent was last given or changed | `2026-01-29` |
+
+### `deletion_requests`: 12 rows
+
+One row is one request from a customer to erase their data. Requests received since June 2026, and when each was marked done. Unique key: `request_id`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `request_id` | number | Unique id for the request | `902` |
+| `customer_id` | number | Who asked | `146` |
+| `received_at` | date | Day the request arrived | `2026-06-25` |
+| `completed_at` | date | Day it was marked done. Empty if still open | `2026-07-11` |
+| `channel` | text | email, web form or app | `web form` |
+
+- The customers in completed requests are still in the other tables. Finding that is one of the exercises.
+
 **How the tables connect:**
 
 - raw_orders_feed.order_id → payments.order_id (orders and their payments)
 - raw_orders_feed.customer_id → customers.customer_id
 - customer_history.customer_id → customers.customer_id (old versions of a customer)
 - orders.order_date between a version's dates → the city the customer lived in at the time
+- order_events.order_id → orders.order_id (the change history of an order)
+- customer_contacts.customer_id and deletion_requests.customer_id → customers.customer_id
+
+## Data team logs (`data/ops/`)
+
+The logs a data team watches every day. Each night three pipelines run for the Nordic Shop: load_orders, load_payments and build_marts, which needs the other two. Every attempt is written to a run log. The shop's cloud warehouse also keeps a history of every query: who ran it, on which warehouse, which table it read and how much data it scanned.
+
+- **Time period:** Pipeline runs for 1 September to 15 November 2026; queries from October 2026
+- **Source:** Made up for teaching. Free to use for anything.
+
+### `pipeline_runs`: 242 rows
+
+One row is one attempt of one pipeline for one day of data. Every attempt, including failures and retries. A day with no successful attempt never loaded. Unique key: `run_id`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `run_id` | number | Unique id for the attempt | `2` |
+| `pipeline` | text | load_orders, load_payments or build_marts | `load_payments` |
+| `run_date` | date | The day of data being processed (not the day it ran) | `2026-09-01` |
+| `attempt` | number | 1 for the first try, 2 for the first retry, and so on | `1` |
+| `started_at` | timestamp | When the attempt started | `2026-09-02 02:30:00` |
+| `finished_at` | timestamp | When it ended | `2026-09-02 02:35:00` |
+| `status` | text | success or failed | `success` |
+| `rows_loaded` | number | Rows loaded (0 for build_marts, which builds tables instead) | `4` |
+
+- Pipelines normally run the night after their run date: orders at 02:00, payments at 02:30, marts at 04:00.
+- Dashboards must be ready by 06:00.
+
+### `query_log`: 1,999 rows
+
+One row is one query run on the warehouse. A month of query history: people, a dashboard service and the nightly dbt job. Unique key: `query_id`.
+
+| Column | Type | What it means | Example |
+|---|---|---|---|
+| `query_id` | number | Unique id for the query | `1` |
+| `user_name` | text | Who ran it. Names ending in _bot or _runner are services | `dashboard_bot` |
+| `warehouse_size` | text | XS, S or M. Each size costs twice the one below | `M` |
+| `started_at` | timestamp | When the query started | `2026-10-01 00:00:00` |
+| `table_name` | text | The main table the query read | `events_raw` |
+| `partition_filter` | true/false | true if the query filtered on the table's date partition | `false` |
+| `bytes_scanned` | number | How much data the query read, in bytes (1e12 bytes = 1 TB) | `47000000000` |
+| `duration_s` | number | How long it ran, in seconds | `54` |
+
+**How the tables connect:**
+
+- The two tables are not joined to each other. query_log.table_name names tables in the shop's warehouse, not tables in this dataset.

@@ -404,6 +404,330 @@
   "solution": "SELECT 'duplicate_orders' AS check_name, COUNT(*) AS failed_rows FROM (SELECT order_id FROM raw_orders_feed GROUP BY order_id HAVING COUNT(*) > 1) AS t UNION ALL SELECT 'missing_customer', COUNT(*) FROM raw_orders_feed WHERE customer_id IS NULL UNION ALL SELECT 'invalid_status', COUNT(*) FROM raw_orders_feed WHERE status NOT IN ('delivered', 'shipped', 'cancelled', 'returned') UNION ALL SELECT 'non_positive_amount', COUNT(*) FROM raw_orders_feed WHERE amount_eur <= 0 UNION ALL SELECT 'double_payments', COUNT(*) FROM (SELECT order_id FROM payments WHERE method <> 'refund' GROUP BY order_id HAVING COUNT(*) > 1) AS p;",
   "ordered": false
  },
+ "dbt1-1": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "SELECT trip_date, trips, ROUND(avg_duration_min, 1) AS avg_duration_min, temp_mean_c AS temp_c, precipitation_mm > 0 AS is_rainy FROM daily_trips;",
+  "ordered": false
+ },
+ "dbt1-2": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "WITH stg_daily_trips AS (SELECT trip_date, trips, precipitation_mm > 0 AS is_rainy FROM daily_trips) SELECT year(trip_date) AS year, month(trip_date) AS month, SUM(trips) AS trips, COUNT(*) FILTER (WHERE is_rainy) AS rainy_days FROM stg_daily_trips GROUP BY 1, 2;",
+  "ordered": false
+ },
+ "dbt2-1": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "SELECT station_id, COUNT(*) AS n FROM stations GROUP BY station_id HAVING COUNT(*) > 1;",
+  "ordered": false
+ },
+ "dbt2-2": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "shop",
+  "solution": "SELECT o.order_id, o.customer_id FROM orders AS o LEFT JOIN customers AS c ON c.customer_id = o.customer_id WHERE c.customer_id IS NULL;",
+  "ordered": false
+ },
+ "dbt2-3": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "SELECT station_id, station_name, capacity FROM stations WHERE capacity IS NULL OR capacity <= 0;",
+  "ordered": false
+ },
+ "dbt3-1": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "SELECT CASE WHEN temp_mean_c < 10 THEN 'cold' WHEN temp_mean_c <= 18 THEN 'mild' ELSE 'warm' END AS temp_band, COUNT(*) AS days, ROUND(AVG(trips), 0) AS avg_trips FROM daily_trips GROUP BY 1;",
+  "ordered": false
+ },
+ "dbt4-1": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "WITH existing AS (SELECT * FROM daily_trips WHERE trip_date <= DATE '2025-06-30') SELECT COUNT(*) AS new_rows FROM daily_trips WHERE trip_date > (SELECT MAX(trip_date) FROM existing);",
+  "ordered": false
+ },
+ "dbt4-2": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "WITH existing AS (SELECT * FROM daily_trips WHERE trip_date <= DATE '2025-06-30') SELECT COUNT(*) AS rows_processed FROM daily_trips WHERE trip_date > (SELECT MAX(trip_date) FROM existing) - INTERVAL 3 DAY;",
+  "ordered": false
+ },
+ "dbt5-1": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "WITH stg_daily_trips AS (SELECT trip_date, trips, temp_mean_c AS temp_c, precipitation_mm > 0 AS is_rainy FROM daily_trips) SELECT year(trip_date) AS year, SUM(trips) AS trips, ROUND(AVG(temp_c), 1) AS avg_temp_c, ROUND(100.0 * COUNT(*) FILTER (WHERE is_rainy) / COUNT(*), 1) AS rainy_share_pct FROM stg_daily_trips GROUP BY 1;",
+  "ordered": false
+ },
+ "dbt5-2": {
+  "kind": "sql",
+  "course": "dbt-in-practice",
+  "dataset": "citybikes",
+  "solution": "SELECT year(trip_date) AS year, COUNT(*) AS days FROM daily_trips GROUP BY 1 HAVING COUNT(*) <> 214;",
+  "ordered": false
+ },
+ "orc1-1": {
+  "kind": "python",
+  "course": "orchestration-and-backfills",
+  "solution": "from graphlib import TopologicalSorter\n\ndag = {\n    \"load_orders\": [],\n    \"load_payments\": [],\n    \"build_marts\": [\"load_orders\", \"load_payments\"],\n    \"refresh_dashboard\": [\"build_marts\"],\n}\ndag[\"load_ads\"] = []\ndag[\"build_campaign_report\"] = [\"load_ads\", \"build_marts\"]\n\norder = list(TopologicalSorter(dag).static_order())\nprint(order)",
+  "check": "_deps = {'build_marts': ['load_orders', 'load_payments'], 'refresh_dashboard': ['build_marts'], 'build_campaign_report': ['load_ads', 'build_marts']}\nassert sorted(order) == sorted(['load_orders', 'load_payments', 'build_marts', 'refresh_dashboard', 'load_ads', 'build_campaign_report']), 'order should contain all six tasks, once each'\nfor _t, _ds in _deps.items():\n    for _d in _ds:\n        assert order.index(_d) < order.index(_t), f'{_d} must run before {_t}'"
+ },
+ "orc2-1": {
+  "kind": "python",
+  "course": "orchestration-and-backfills",
+  "solution": "def with_retries(fn, attempts=3):\n    for i in range(attempts):\n        try:\n            return fn()\n        except Exception:\n            if i == attempts - 1:\n                raise\n",
+  "check": "_calls = {'n': 0}\ndef _flaky():\n    _calls['n'] += 1\n    if _calls['n'] < 3:\n        raise ConnectionError('timeout')\n    return 'ok'\nassert with_retries(_flaky) == 'ok', 'should return the result once fn succeeds'\nassert _calls['n'] == 3, 'should call fn exactly until it succeeds'\n_c2 = {'n': 0}\ndef _broken():\n    _c2['n'] += 1\n    raise ValueError('bad password')\ntry:\n    with_retries(_broken, attempts=2)\n    raise AssertionError('should raise after the last attempt fails')\nexcept ValueError:\n    pass\nassert _c2['n'] == 2, 'with attempts=2, fn should be called twice'"
+ },
+ "orc2-2": {
+  "kind": "sql",
+  "course": "orchestration-and-backfills",
+  "dataset": "ops",
+  "solution": "SELECT pipeline, run_date, MAX(attempt) AS attempts FROM pipeline_runs GROUP BY pipeline, run_date HAVING MAX(attempt) > 1;",
+  "ordered": false
+ },
+ "orc3-1": {
+  "kind": "sql",
+  "course": "orchestration-and-backfills",
+  "dataset": "ops",
+  "solution": "WITH days AS (SELECT d::DATE AS run_date FROM generate_series(DATE '2026-09-01', DATE '2026-11-15', INTERVAL 1 DAY) AS t(d)) SELECT run_date FROM days WHERE run_date NOT IN (SELECT run_date FROM pipeline_runs WHERE pipeline = 'load_payments' AND status = 'success');",
+  "ordered": false
+ },
+ "orc3-2": {
+  "kind": "sql",
+  "course": "orchestration-and-backfills",
+  "dataset": "ops",
+  "solution": "SELECT run_date, finished_at FROM pipeline_runs WHERE pipeline = 'build_marts' AND status = 'success' AND finished_at > run_date + INTERVAL 1 DAY + INTERVAL 6 HOUR;",
+  "ordered": false
+ },
+ "orc4-1": {
+  "kind": "sql",
+  "course": "orchestration-and-backfills",
+  "dataset": "ops",
+  "solution": "WITH days AS (SELECT d::DATE AS run_date FROM generate_series(DATE '2026-09-01', DATE '2026-11-15', INTERVAL 1 DAY) AS t(d)), pipelines AS (SELECT DISTINCT pipeline FROM pipeline_runs), expected AS (SELECT p.pipeline, d.run_date FROM pipelines AS p CROSS JOIN days AS d) SELECT e.pipeline, e.run_date FROM expected AS e LEFT JOIN pipeline_runs AS r ON r.pipeline = e.pipeline AND r.run_date = e.run_date AND r.status = 'success' WHERE r.run_id IS NULL ORDER BY e.pipeline, e.run_date;",
+  "ordered": true
+ },
+ "orc4-2": {
+  "kind": "python",
+  "course": "orchestration-and-backfills",
+  "solution": "from datetime import date, timedelta\n\ndef backfill_dates(start, end, done):\n    d = date.fromisoformat(start)\n    last = date.fromisoformat(end)\n    out = []\n    while d <= last:\n        if d.isoformat() not in done:\n            out.append(d.isoformat())\n        d += timedelta(days=1)\n    return out\n\nprint(backfill_dates(\"2026-10-01\", \"2026-10-07\", {\"2026-10-01\", \"2026-10-02\", \"2026-10-03\", \"2026-10-07\"}))",
+  "check": "assert backfill_dates('2026-10-01', '2026-10-07', {'2026-10-01', '2026-10-02', '2026-10-03', '2026-10-07'}) == ['2026-10-04', '2026-10-05', '2026-10-06'], 'expected 4, 5 and 6 October'\nassert backfill_dates('2026-02-27', '2026-03-02', set()) == ['2026-02-27', '2026-02-28', '2026-03-01', '2026-03-02'], 'include both ends, and handle the end of a month'\nassert backfill_dates('2026-01-01', '2026-01-01', {'2026-01-01'}) == [], 'nothing to do when everything is done'"
+ },
+ "orc5-1": {
+  "kind": "sql",
+  "course": "orchestration-and-backfills",
+  "dataset": "ops",
+  "solution": "WITH days AS (SELECT d::DATE AS run_date FROM generate_series(DATE '2026-09-01', DATE '2026-11-15', INTERVAL 1 DAY) AS t(d)) SELECT pipeline, COUNT(DISTINCT run_date) FILTER (WHERE status = 'success') AS successful_days, COUNT(*) FILTER (WHERE status = 'failed') AS failed_attempts, (SELECT COUNT(*) FROM days) - COUNT(DISTINCT run_date) FILTER (WHERE status = 'success') AS missing_days FROM pipeline_runs GROUP BY pipeline;",
+  "ordered": false
+ },
+ "cw1-1": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT table_name, ROUND(SUM(bytes_scanned) / 1e12, 2) AS tb_scanned FROM query_log GROUP BY table_name;",
+  "ordered": false
+ },
+ "cw2-1": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT user_name, ROUND(SUM(bytes_scanned) / 1e12 * 5, 2) AS cost_eur FROM query_log GROUP BY user_name;",
+  "ordered": false
+ },
+ "cw2-2": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT user_name, COUNT(*) AS queries FROM query_log WHERE user_name NOT LIKE '%_bot' AND user_name NOT LIKE '%_runner' GROUP BY user_name HAVING SUM(bytes_scanned) / 1e12 * 5 > 1;",
+  "ordered": false
+ },
+ "cw3-1": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT table_name, COUNT(*) AS queries, COUNT(*) FILTER (WHERE NOT partition_filter) AS unfiltered FROM query_log GROUP BY table_name;",
+  "ordered": false
+ },
+ "cw3-2": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "citybikes",
+  "solution": "SELECT ROUND(COUNT(*) FILTER (WHERE year(trip_date) = 2025) / COUNT(*), 2) AS share_read FROM daily_trips;",
+  "ordered": false
+ },
+ "cw4-1": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT warehouse_size, ROUND(SUM(duration_s) / 3600.0 * CASE warehouse_size WHEN 'XS' THEN 1 WHEN 'S' THEN 2 WHEN 'M' THEN 4 END, 2) AS credits FROM query_log GROUP BY warehouse_size;",
+  "ordered": false
+ },
+ "cw5-1": {
+  "kind": "sql",
+  "course": "cloud-warehouses",
+  "dataset": "ops",
+  "solution": "SELECT ROUND(SUM(bytes_scanned) / 1e12 * 5, 2) AS cost_now_eur, ROUND(SUM(bytes_scanned) / 30 / 1e12 * 5, 2) AS cost_after_eur FROM query_log WHERE user_name = 'dashboard_bot';",
+  "ordered": false
+ },
+ "sc1-1": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "SELECT op, COUNT(*) AS events FROM order_events GROUP BY op;",
+  "ordered": false
+ },
+ "sc2-1": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH latest AS (SELECT * FROM order_events QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY lsn DESC) = 1) SELECT order_id, status, amount_eur FROM latest WHERE op <> 'd';",
+  "ordered": false
+ },
+ "sc2-2": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH latest AS (SELECT * FROM order_events QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY lsn DESC) = 1) SELECT status, COUNT(*) AS orders FROM latest WHERE op <> 'd' GROUP BY status;",
+  "ordered": false
+ },
+ "sc3-1": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH arrivals AS (SELECT lsn, order_id, LAG(lsn) OVER (ORDER BY received_at, lsn) AS previous_lsn FROM order_events) SELECT lsn, order_id FROM arrivals WHERE lsn < previous_lsn;",
+  "ordered": false
+ },
+ "sc3-2": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH by_lsn AS (SELECT order_id, arg_max(lsn, lsn) AS lsn FROM order_events GROUP BY order_id), by_arrival AS (SELECT order_id, arg_max(lsn, received_at) AS lsn FROM order_events GROUP BY order_id) SELECT COUNT(*) AS orders_wrong FROM by_lsn AS a JOIN by_arrival AS b ON b.order_id = a.order_id WHERE a.lsn <> b.lsn;",
+  "ordered": false
+ },
+ "sc4-1": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "SELECT changed_at::DATE AS day, COUNT(*) AS new_orders FROM order_events WHERE op = 'c' AND changed_at >= TIMESTAMP '2026-10-01' AND changed_at < TIMESTAMP '2026-11-01' GROUP BY day;",
+  "ordered": false
+ },
+ "sc4-2": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH times AS (SELECT order_id, MIN(changed_at) FILTER (WHERE status = 'placed') AS placed_at, MIN(changed_at) FILTER (WHERE status = 'delivered') AS delivered_at FROM order_events GROUP BY order_id) SELECT ROUND(AVG(date_diff('minute', placed_at, delivered_at)) / 60, 1) AS avg_hours FROM times WHERE delivered_at IS NOT NULL;",
+  "ordered": false
+ },
+ "sc5-1": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "SELECT order_id, status, changed_at AS valid_from, LEAD(changed_at) OVER (PARTITION BY order_id ORDER BY lsn) AS valid_to FROM order_events WHERE op <> 'd';",
+  "ordered": false
+ },
+ "sc5-2": {
+  "kind": "sql",
+  "course": "streaming-and-cdc",
+  "dataset": "feeds",
+  "solution": "WITH latest AS (SELECT * FROM order_events QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY lsn DESC) = 1) SELECT order_id, changed_at AS shipped_at FROM latest WHERE status = 'shipped' AND changed_at < TIMESTAMP '2026-11-19' - INTERVAL 7 DAY;",
+  "ordered": false
+ },
+ "pd1-1": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "SELECT COUNT(*) AS customers, COUNT(*) FILTER (WHERE marketing_consent) AS can_email FROM customer_contacts;",
+  "ordered": false
+ },
+ "pd2-1": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "SELECT customer_id, sha256('learn-salt' || email) AS email_token, birth_year // 10 * 10 AS birth_decade FROM customer_contacts;",
+  "ordered": false
+ },
+ "pd2-2": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "SELECT customer_id, left(email, 1) || '***@' || split_part(email, '@', 2) AS email_masked, right(phone, 4) AS phone_last4 FROM customer_contacts;",
+  "ordered": false
+ },
+ "pd3-1": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "SELECT c.city, cc.birth_year // 10 * 10 AS birth_decade, COUNT(*) AS customers FROM customers AS c JOIN customer_contacts AS cc ON cc.customer_id = c.customer_id WHERE c.city IS NOT NULL GROUP BY ALL HAVING COUNT(*) >= 5;",
+  "ordered": false
+ },
+ "pd4-1": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "SELECT request_id, customer_id, coalesce(completed_at, DATE '2026-11-20') - received_at AS days_taken FROM deletion_requests WHERE coalesce(completed_at, DATE '2026-11-20') - received_at > 30;",
+  "ordered": false
+ },
+ "pd4-2": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "WITH done AS (SELECT customer_id FROM deletion_requests WHERE completed_at IS NOT NULL) SELECT 'customers' AS table_name, COUNT(*) AS rows FROM customers WHERE customer_id IN (SELECT customer_id FROM done) UNION ALL SELECT 'customer_contacts', COUNT(*) FROM customer_contacts WHERE customer_id IN (SELECT customer_id FROM done) UNION ALL SELECT 'orders', COUNT(*) FROM orders WHERE customer_id IN (SELECT customer_id FROM done);",
+  "ordered": false
+ },
+ "pd5-1": {
+  "kind": "sql",
+  "course": "privacy-by-design",
+  "dataset": "feeds",
+  "solution": "WITH who AS (SELECT customer_id FROM deletion_requests WHERE request_id = 902) SELECT 'customers' AS table_name, COUNT(*) AS rows, 'delete' AS action FROM customers WHERE customer_id IN (SELECT customer_id FROM who) UNION ALL SELECT 'customer_contacts', COUNT(*), 'delete' FROM customer_contacts WHERE customer_id IN (SELECT customer_id FROM who) UNION ALL SELECT 'customer_history', COUNT(*), 'delete' FROM customer_history WHERE customer_id IN (SELECT customer_id FROM who) UNION ALL SELECT 'orders', COUNT(*), 'anonymise' FROM orders WHERE customer_id IN (SELECT customer_id FROM who) UNION ALL SELECT 'raw_orders_feed', COUNT(*), 'anonymise' FROM raw_orders_feed WHERE customer_id IN (SELECT customer_id FROM who);",
+  "ordered": false
+ },
+ "jb1-1": {
+  "kind": "sql",
+  "course": "portfolio-and-job-search",
+  "dataset": "shop",
+  "solution": "SELECT product_name, price FROM products WHERE price = (SELECT DISTINCT price FROM products ORDER BY price DESC LIMIT 1 OFFSET 1);",
+  "ordered": false
+ },
+ "jb3-1": {
+  "kind": "sql",
+  "course": "portfolio-and-job-search",
+  "dataset": "shop",
+  "solution": "WITH revenue AS (SELECT p.category, p.product_name, ROUND(SUM(i.quantity * i.unit_price), 2) AS revenue FROM order_items AS i JOIN orders AS o ON o.order_id = i.order_id JOIN products AS p ON p.product_id = i.product_id WHERE o.status = 'delivered' GROUP BY p.category, p.product_name) SELECT category, product_name, revenue FROM revenue QUALIFY ROW_NUMBER() OVER (PARTITION BY category ORDER BY revenue DESC, product_name) <= 2;",
+  "ordered": false
+ },
+ "jb3-2": {
+  "kind": "sql",
+  "course": "portfolio-and-job-search",
+  "dataset": "shop",
+  "solution": "SELECT COUNT(*) AS customers FROM (SELECT DISTINCT customer_id FROM orders WHERE year(order_date) = 2025) AS y25 WHERE customer_id IN (SELECT customer_id FROM orders WHERE year(order_date) = 2026);",
+  "ordered": false
+ },
+ "jb3-3": {
+  "kind": "sql",
+  "course": "portfolio-and-job-search",
+  "dataset": "shop",
+  "solution": "WITH monthly AS (SELECT month(o.order_date) AS month, ROUND(SUM(i.quantity * i.unit_price), 2) AS revenue FROM orders AS o JOIN order_items AS i ON i.order_id = o.order_id WHERE o.status = 'delivered' AND year(o.order_date) = 2026 GROUP BY 1) SELECT month, revenue, ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month)) / LAG(revenue) OVER (ORDER BY month), 1) AS growth_pct FROM monthly ORDER BY month;",
+  "ordered": true
+ },
+ "jb4-1": {
+  "kind": "python",
+  "course": "portfolio-and-job-search",
+  "solution": "def latest_per_id(records):\n    latest = {}\n    for r in records:\n        if r[\"id\"] not in latest or r[\"updated_at\"] > latest[r[\"id\"]][\"updated_at\"]:\n            latest[r[\"id\"]] = r\n    return [latest[k] for k in sorted(latest)]\n\nrows = [\n    {\"id\": 2, \"updated_at\": \"2026-11-01T10:00:00\", \"status\": \"shipped\"},\n    {\"id\": 1, \"updated_at\": \"2026-11-01T09:00:00\", \"status\": \"placed\"},\n    {\"id\": 2, \"updated_at\": \"2026-11-03T08:00:00\", \"status\": \"delivered\"},\n]\nprint(latest_per_id(rows))",
+  "check": "_r = [{'id': 2, 'updated_at': '2026-11-01T10:00:00', 's': 'a'}, {'id': 1, 'updated_at': '2026-11-01T09:00:00', 's': 'b'}, {'id': 2, 'updated_at': '2026-11-03T08:00:00', 's': 'c'}, {'id': 1, 'updated_at': '2026-10-30T09:00:00', 's': 'd'}]\n_out = latest_per_id(_r)\nassert [x['id'] for x in _out] == [1, 2], 'one record per id, sorted by id'\nassert [x['s'] for x in _out] == ['b', 'c'], 'keep the record with the latest updated_at'\nassert latest_per_id([]) == [], 'an empty list should give an empty list'"
+ },
+ "jb4-2": {
+  "kind": "python",
+  "course": "portfolio-and-job-search",
+  "solution": "def batches(items, size):\n    return [items[i:i + size] for i in range(0, len(items), size)]\n\nprint(batches([1, 2, 3, 4, 5], 2))",
+  "check": "assert batches([1, 2, 3, 4, 5], 2) == [[1, 2], [3, 4], [5]], 'the last batch can be smaller'\nassert batches([1, 2, 3], 3) == [[1, 2, 3]], 'exactly one full batch'\nassert batches([], 4) == [], 'no items, no batches'"
+ },
  "py-1": {
   "kind": "python",
   "course": "python-challenges",
